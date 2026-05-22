@@ -78,9 +78,6 @@ const createSoundEngine = () => {
 }
 
 function randomFoodPosition(snake) {
-  // ⚡ Bolt Optimization: Use 1D typed array instead of Set with strings
-  // Reduces memory allocations and GC pauses during frequent game ticks
-  // ~6x faster than previous Set + string map implementation
   const occupied = new Int8Array(BOARD_SIZE * BOARD_SIZE)
   for (let i = 0; i < snake.length; i++) {
     occupied[snake[i].y * BOARD_SIZE + snake[i].x] = 1
@@ -261,9 +258,6 @@ function App() {
   ]
 
   const cells = useMemo(() => {
-    // ⚡ Bolt Optimization: Use 1D typed array for lookup instead of Map with strings
-    // Avoids creating 256 strings every time the snake moves
-    // ~3x faster rendering lookup compared to Map
     const snakeLookup = new Int32Array(BOARD_SIZE * BOARD_SIZE).fill(-1)
     for (let i = 0; i < snake.length; i++) {
       snakeLookup[snake[i].y * BOARD_SIZE + snake[i].x] = i
