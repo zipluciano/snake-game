@@ -250,10 +250,10 @@ function App() {
   }
 
   const touchControls = [
-    { label: '↑', direction: DIRECTIONS.up, className: 'col-start-2 row-start-1' },
-    { label: '←', direction: DIRECTIONS.left, className: 'col-start-1 row-start-2' },
-    { label: '↓', direction: DIRECTIONS.down, className: 'col-start-2 row-start-2' },
-    { label: '→', direction: DIRECTIONS.right, className: 'col-start-3 row-start-2' },
+    { label: '↑', ariaLabel: 'cima', direction: DIRECTIONS.up, className: 'col-start-2 row-start-1' },
+    { label: '←', ariaLabel: 'esquerda', direction: DIRECTIONS.left, className: 'col-start-1 row-start-2' },
+    { label: '↓', ariaLabel: 'baixo', direction: DIRECTIONS.down, className: 'col-start-2 row-start-2' },
+    { label: '→', ariaLabel: 'direita', direction: DIRECTIONS.right, className: 'col-start-3 row-start-2' },
   ]
 
   const cells = useMemo(() => {
@@ -318,14 +318,14 @@ function App() {
                   soundEngineRef.current?.toggle()
                   setIsRunning(true)
                 }}
-                className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950 transition hover:scale-[1.02] hover:bg-cyan-200"
+                className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950 transition hover:scale-[1.02] hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 {isGameOver ? 'Novo jogo' : isRunning ? 'Jogando' : 'Iniciar'}
               </button>
               <button
                 type="button"
                 onClick={resetGame}
-                className="rounded-full border border-white/15 bg-white/[0.05] px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-white transition hover:border-white/30 hover:bg-white/[0.09]"
+                className="rounded-full border border-white/15 bg-white/[0.05] px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-white transition hover:border-white/30 hover:bg-white/[0.09] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 Reiniciar
               </button>
@@ -386,17 +386,17 @@ function App() {
             </div>
 
             <div className="grid grid-cols-3 grid-rows-2 gap-3 sm:hidden">
-              {touchControls.map(({ label, direction: nextDirection, className }) => (
+              {touchControls.map(({ label, ariaLabel, direction: nextDirection, className }) => (
                 <button
                   key={label}
                   type="button"
-                  aria-label={`Mover para ${label}`}
+                  aria-label={`Mover para ${ariaLabel}`}
                   onTouchStart={(event) => {
                     event.preventDefault()
                     requestDirection(nextDirection)
                   }}
                   onClick={() => requestDirection(nextDirection)}
-                  className={`rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-2xl font-bold text-white shadow-[0_12px_30px_rgba(8,15,32,0.45)] transition active:scale-95 ${className}`}
+                  className={`rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-2xl font-bold text-white shadow-[0_12px_30px_rgba(8,15,32,0.45)] transition active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${className}`}
                 >
                   {label}
                 </button>
