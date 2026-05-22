@@ -203,21 +203,15 @@ function App() {
 
         const head = currentSnake[0]
         const nextHead = {
-          x: head.x + nextDirection.x,
-          y: head.y + nextDirection.y,
+          x: (head.x + nextDirection.x + BOARD_SIZE) % BOARD_SIZE,
+          y: (head.y + nextDirection.y + BOARD_SIZE) % BOARD_SIZE,
         }
-
-        const hitsWall =
-          nextHead.x < 0 ||
-          nextHead.x >= BOARD_SIZE ||
-          nextHead.y < 0 ||
-          nextHead.y >= BOARD_SIZE
 
         const grows = isSameCell(nextHead, food)
         const bodyToCheck = grows ? currentSnake : currentSnake.slice(0, -1)
         const hitsSelf = bodyToCheck.some((segment) => isSameCell(segment, nextHead))
 
-        if (hitsWall || hitsSelf) {
+        if (hitsSelf) {
           setIsRunning(false)
           setIsGameOver(true)
           soundEngineRef.current?.gameOver()
@@ -298,7 +292,7 @@ function App() {
               <p className="text-xs uppercase tracking-[0.4em] text-cyan-200/70">Snake</p>
               <h1 className="text-4xl font-black uppercase tracking-[0.18em] text-white sm:text-5xl">Jogo</h1>
               <p className="mt-3 max-w-sm text-sm leading-6 text-slate-300">
-                Colete os pontos, aumente a cobra e evite colisões com paredes ou com o próprio corpo.
+                Colete os pontos, aumente a cobra e evite colisões com o próprio corpo.
               </p>
             </div>
 
