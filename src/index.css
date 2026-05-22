@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  background: #020617;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(34, 211, 238, 0.14), transparent 30%),
+    linear-gradient(160deg, #020617, #081127 48%, #020617);
+}
+
+button {
+  font: inherit;
+}
+
+button,
+.cell-head,
+.cell-snake,
+.cell-food {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible {
+  outline: 2px solid rgba(103, 232, 249, 0.9);
+  outline-offset: 3px;
+}
+
+.game-board {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 28px 70px rgba(8, 15, 32, 0.45);
+}
+
+.game-board::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 35%),
+    linear-gradient(0deg, rgba(34, 211, 238, 0.05), transparent 40%);
+}
+
+.cell-head,
+.cell-snake,
+.cell-food {
+  transition:
+    transform 120ms ease,
+    filter 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.cell-head {
+  animation: snake-head-glow 0.9s ease-in-out infinite alternate;
+}
+
+.cell-snake {
+  animation: snake-body-shift 1.4s ease-in-out infinite alternate;
+}
+
+.cell-food {
+  animation: food-pulse 0.95s ease-in-out infinite alternate;
+}
+
+@keyframes food-pulse {
+  from {
+    transform: scale(0.88);
+    filter: saturate(0.95);
+  }
+  to {
+    transform: scale(1);
+    filter: saturate(1.15);
+  }
+}
+
+@keyframes snake-head-glow {
+  from {
+    transform: scale(0.96);
+    filter: brightness(0.98);
+  }
+  to {
+    transform: scale(1);
+    filter: brightness(1.08);
+  }
+}
+
+@keyframes snake-body-shift {
+  from {
+    filter: brightness(0.94);
+  }
+  to {
+    filter: brightness(1.06);
+  }
+}
