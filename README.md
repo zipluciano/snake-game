@@ -33,7 +33,7 @@ Depois, abra o endereço exibido pelo Vite no navegador.
 
 ## Deploy
 
-O deploy está configurado via GitHub Actions em `.github/workflows/deploy.yml`, usando o fluxo nativo do GitHub Pages. Em builds rodando no GitHub, o `base` do Vite é ajustado automaticamente para funcionar tanto em user/org pages (`https://usuario.github.io/`) quanto em project pages (`https://usuario.github.io/repositorio/`).
+O deploy está configurado via GitHub Actions em `.github/workflows/deploy.yml`, usando o fluxo nativo do GitHub Pages. O Vite usa `base: './'` para gerar caminhos relativos no build, evitando problemas de carregamento de assets tanto em user/org pages quanto em project pages.
 
 ## Estrutura do projeto
 
