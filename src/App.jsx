@@ -318,13 +318,15 @@ function App() {
                   ensureAudio()
                   if (isGameOver) {
                     resetGame()
+                    soundEngineRef.current?.toggle()
+                    setIsRunning(true)
+                  } else {
+                    handleToggleRunning()
                   }
-                  soundEngineRef.current?.toggle()
-                  setIsRunning(true)
                 }}
                 className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950 transition hover:scale-[1.02] hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
-                {isGameOver ? 'Novo jogo' : isRunning ? 'Jogando' : 'Iniciar'}
+                {isGameOver ? 'Novo jogo' : isRunning ? 'Pausar' : (snake !== INITIAL_SNAKE || score > 0) ? 'Retomar' : 'Iniciar'}
               </button>
               <button
                 type="button"
@@ -345,10 +347,10 @@ function App() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90">
+            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90" aria-live="polite" aria-atomic="true">
               Estado:{' '}
               <span className="font-semibold text-white">
-                {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : 'Pronto para começar'}
+                {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : (snake !== INITIAL_SNAKE || score > 0) ? 'Pausado' : 'Pronto para começar'}
               </span>
             </div>
           </div>
@@ -374,15 +376,17 @@ function App() {
                 <div className="absolute inset-0 flex items-center justify-center rounded-[28px] bg-slate-950/68 backdrop-blur-sm">
                   <div className="mx-4 max-w-sm rounded-[28px] border border-white/10 bg-white/[0.05] px-8 py-7 text-center shadow-2xl">
                     <p className="text-xs uppercase tracking-[0.38em] text-cyan-200/80">
-                      {isGameOver ? 'Fim de jogo' : 'Pronto'}
+                      {isGameOver ? 'Fim de jogo' : (snake !== INITIAL_SNAKE || score > 0) ? 'Pausado' : 'Pronto'}
                     </p>
                     <h2 className="mt-3 font-display text-3xl font-black uppercase tracking-[0.14em] text-white">
-                      {isGameOver ? 'Tente novamente' : 'Pressione iniciar'}
+                      {isGameOver ? 'Tente novamente' : (snake !== INITIAL_SNAKE || score > 0) ? 'Pressione para retomar' : 'Pressione iniciar'}
                     </h2>
                     <p className="mt-3 text-sm leading-6 text-slate-300">
                       {isGameOver
                         ? `Você marcou ${score} pontos. Reinicie e tente superar ${highScore}.`
-                        : 'Toque em iniciar ou em uma direção para começar.'}
+                        : (snake !== INITIAL_SNAKE || score > 0)
+                          ? 'Toque em retomar ou pressione espaço para continuar.'
+                          : 'Toque em iniciar ou em uma direção para começar.'}
                     </p>
                   </div>
                 </div>

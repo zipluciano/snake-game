@@ -1,3 +1,6 @@
 ## 2024-05-22 - Improved screen reader interpretation for symbol icons and fixed keyboard focus visibility
 **Learning:** Screen readers may misinterpret basic symbol characters (like '↑', '↓', '←', '→') or they may be confusing for users if read literally as symbols. In addition, interactive elements built without explicit focus indicators (like tailwind's `focus-visible` ring) provide poor navigational context for keyboard users.
 **Action:** Always provide explicitly localized and descriptive text via `aria-label` when using symbol icons or basic text characters for button content. Additionally, ensure `focus-visible:outline-none focus-visible:ring-2` (or equivalent styles) are applied to all interactive controls so keyboard navigation is visibly obvious.
+## 2024-05-24 - Screen Reader Compatibility
+**Learning:** Adding `aria-live="polite"` and `aria-atomic="true"` to a status display div helps screen readers announce changes dynamically.
+**Action:** Always include aria-live attributes when UI state updates dynamically so visually impaired users are kept informed.
