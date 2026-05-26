@@ -149,14 +149,26 @@ function App() {
   }
 
   useEffect(() => {
-    const savedHighScore = window.localStorage.getItem('snake-high-score')
-    if (savedHighScore) {
-      setHighScore(Number(savedHighScore))
+    try {
+      const savedHighScore = window.localStorage.getItem('snake-high-score')
+      if (savedHighScore) {
+        // Security enhancement: Validate untrusted data from localStorage
+        const parsedScore = Number(savedHighScore)
+        if (!Number.isNaN(parsedScore) && parsedScore >= 0) {
+          setHighScore(parsedScore)
+        }
+      }
+    } catch (error) {
+      // Fail securely: Ignore localStorage errors (e.g., in incognito mode)
     }
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem('snake-high-score', String(highScore))
+    try {
+      window.localStorage.setItem('snake-high-score', String(highScore))
+    } catch (error) {
+      // Fail securely: Ignore localStorage errors
+    }
   }, [highScore])
 
   useEffect(() => {
