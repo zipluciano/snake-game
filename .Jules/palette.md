@@ -1,3 +1,6 @@
 ## 2024-05-22 - Improved screen reader interpretation for symbol icons and fixed keyboard focus visibility
 **Learning:** Screen readers may misinterpret basic symbol characters (like '↑', '↓', '←', '→') or they may be confusing for users if read literally as symbols. In addition, interactive elements built without explicit focus indicators (like tailwind's `focus-visible` ring) provide poor navigational context for keyboard users.
 **Action:** Always provide explicitly localized and descriptive text via `aria-label` when using symbol icons or basic text characters for button content. Additionally, ensure `focus-visible:outline-none focus-visible:ring-2` (or equivalent styles) are applied to all interactive controls so keyboard navigation is visibly obvious.
+## 2026-06-02 - Game State Accessibility
+**Learning:** Dynamic text that conveys critical application state (like game status 'Game over' or 'Em andamento') needs `role="status"` and `aria-live="polite"` so screen readers announce state changes without requiring the user to explicitly focus the element.
+**Action:** Always add `role="status"` and `aria-live="polite"` to status indicator elements that update dynamically.

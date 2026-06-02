@@ -338,14 +338,14 @@ function App() {
             <div className="rounded-3xl border border-white/10 bg-slate-950/45 p-5">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white">Controles</p>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-300">
-                <li>↑ ↓ ← → ou WASD para mover</li>
+                <li><kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">↑</kbd> <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">↓</kbd> <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">←</kbd> <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">→</kbd> ou <kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">WASD</kbd> para mover</li>
                 <li>Toque nas setas abaixo do tabuleiro no mobile</li>
-                <li>Espaço para pausar/retomar</li>
+                <li><kbd className="rounded border border-slate-700 bg-slate-800 px-1.5 py-0.5 text-xs font-semibold text-slate-200 shadow-sm">Espaço</kbd> para pausar/retomar</li>
                 <li>Sem reversão imediata de direção</li>
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90">
+            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90" role="status" aria-live="polite">
               Estado:{' '}
               <span className="font-semibold text-white">
                 {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : 'Pronto para começar'}
