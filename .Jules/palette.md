@@ -1,3 +1,6 @@
 ## 2024-05-22 - Improved screen reader interpretation for symbol icons and fixed keyboard focus visibility
 **Learning:** Screen readers may misinterpret basic symbol characters (like '↑', '↓', '←', '→') or they may be confusing for users if read literally as symbols. In addition, interactive elements built without explicit focus indicators (like tailwind's `focus-visible` ring) provide poor navigational context for keyboard users.
 **Action:** Always provide explicitly localized and descriptive text via `aria-label` when using symbol icons or basic text characters for button content. Additionally, ensure `focus-visible:outline-none focus-visible:ring-2` (or equivalent styles) are applied to all interactive controls so keyboard navigation is visibly obvious.
+## 2024-11-23 - Mobile controls lack keyboard parity
+**Learning:** When porting a game or desktop application to a mobile UI, do not assume all keyboard shortcuts (like Spacebar to pause) are optional. If an action is required for the user experience, an explicit touch target must be provided.
+**Action:** Ensure all core interactions (like Pause/Resume) have dedicated touchable buttons if they were originally mapped to keyboard events.
