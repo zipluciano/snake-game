@@ -13,33 +13,35 @@ const snake = [
 ];
 
 function oldWay() {
-  const snakeLookup = new Map(snake.map((segment, index) => [`${segment.x},${segment.y}`, index]))
+  const snakeLookup = new Map(
+    snake.map((segment, index) => [`${segment.x},${segment.y}`, index]),
+  );
 
   return Array.from({ length: BOARD_SIZE * BOARD_SIZE }, (_, index) => {
-    const x = index % BOARD_SIZE
-    const y = Math.floor(index / BOARD_SIZE)
-    const cellKey = `${x},${y}`
-    const snakeIndex = snakeLookup.get(cellKey)
+    const x = index % BOARD_SIZE;
+    const y = Math.floor(index / BOARD_SIZE);
+    const cellKey = `${x},${y}`;
+    const snakeIndex = snakeLookup.get(cellKey);
     return snakeIndex;
   });
 }
 
 function newWay() {
-  const snakeLookup = new Int32Array(BOARD_SIZE * BOARD_SIZE).fill(-1)
+  const snakeLookup = new Int32Array(BOARD_SIZE * BOARD_SIZE).fill(-1);
   for (let i = 0; i < snake.length; i++) {
-    snakeLookup[snake[i].y * BOARD_SIZE + snake[i].x] = i
+    snakeLookup[snake[i].y * BOARD_SIZE + snake[i].x] = i;
   }
 
   return Array.from({ length: BOARD_SIZE * BOARD_SIZE }, (_, index) => {
-    const snakeIndex = snakeLookup[index]
+    const snakeIndex = snakeLookup[index];
     return snakeIndex;
   });
 }
 
-console.time('oldWay');
+console.time("oldWay");
 for (let i = 0; i < 10000; i++) oldWay();
-console.timeEnd('oldWay');
+console.timeEnd("oldWay");
 
-console.time('newWay');
+console.time("newWay");
 for (let i = 0; i < 10000; i++) newWay();
-console.timeEnd('newWay');
+console.timeEnd("newWay");
