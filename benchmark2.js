@@ -13,40 +13,43 @@ const snake = [
 ];
 
 function oldWay() {
-  const occupied = new Set(snake.map((segment) => `${segment.x},${segment.y}`))
-  const available = []
+  const occupied = new Set(snake.map((segment) => `${segment.x},${segment.y}`));
+  const available = [];
 
   for (let y = 0; y < BOARD_SIZE; y += 1) {
     for (let x = 0; x < BOARD_SIZE; x += 1) {
       if (!occupied.has(`${x},${y}`)) {
-        available.push({ x, y })
+        available.push({ x, y });
       }
     }
   }
 
-  return available[Math.floor(Math.random() * available.length)]
+  return available[Math.floor(Math.random() * available.length)];
 }
 
 function newWay() {
-  const occupied = new Int8Array(BOARD_SIZE * BOARD_SIZE)
+  const occupied = new Int8Array(BOARD_SIZE * BOARD_SIZE);
   for (let i = 0; i < snake.length; i++) {
-    occupied[snake[i].y * BOARD_SIZE + snake[i].x] = 1
+    occupied[snake[i].y * BOARD_SIZE + snake[i].x] = 1;
   }
 
-  const available = []
+  const available = [];
   for (let index = 0; index < BOARD_SIZE * BOARD_SIZE; index++) {
     if (occupied[index] === 0) {
-      available.push({ x: index % BOARD_SIZE, y: Math.floor(index / BOARD_SIZE) })
+      available.push({
+        x: index % BOARD_SIZE,
+        y: Math.floor(index / BOARD_SIZE),
+      });
     }
   }
 
-  return available[Math.floor(Math.random() * available.length)]
+  return available[Math.floor(Math.random() * available.length)];
 }
 
-console.time('oldWay');
+console.time("oldWay");
 for (let i = 0; i < 10000; i++) oldWay();
-console.timeEnd('oldWay');
+console.timeEnd("oldWay");
 
-console.time('newWay');
+console.time("newWay");
 for (let i = 0; i < 10000; i++) newWay();
-console.timeEnd('newWay');
+console.timeEnd("newWay");
