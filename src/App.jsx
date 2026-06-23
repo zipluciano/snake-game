@@ -151,7 +151,7 @@ function App() {
   useEffect(() => {
     const savedHighScore = window.localStorage.getItem('snake-high-score')
     if (savedHighScore) {
-      setHighScore(Number(savedHighScore))
+      setHighScore(Number(savedHighScore) || 0)
     }
   }, [])
 
