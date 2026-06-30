@@ -149,14 +149,25 @@ function App() {
   }
 
   useEffect(() => {
-    const savedHighScore = window.localStorage.getItem('snake-high-score')
-    if (savedHighScore) {
-      setHighScore(Number(savedHighScore))
+    try {
+      const savedHighScore = window.localStorage.getItem('snake-high-score')
+      if (savedHighScore) {
+        const parsed = Number(savedHighScore)
+        if (Number.isFinite(parsed) && parsed >= 0) {
+          setHighScore(parsed)
+        }
+      }
+    } catch (error) {
+      // Ignore error securely to prevent exposing details or crashing
     }
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem('snake-high-score', String(highScore))
+    try {
+      window.localStorage.setItem('snake-high-score', String(highScore))
+    } catch (error) {
+      // Ignore error securely to prevent exposing details or crashing
+    }
   }, [highScore])
 
   useEffect(() => {
