@@ -1,3 +1,6 @@
 ## 2024-06-11 - Fast 2D Grid Coordinate Tracking in React
 **Learning:** Tracking 2D grid coordinates with strings (e.g., \`\${x},\${y}\`) as keys in \`Map\` or \`Set\` structures inside of \`useMemo\` or frequent render cycles creates significant performance overhead due to constant string allocation and garbage collection.
 **Action:** Replace string-based 2D lookups with 1D typed arrays (\`Int8Array\` or \`Int32Array\`) using the formula \`index = y * width + x\`. This avoids memory allocation during the render cycle and is roughly 3x-6x faster for lookups and iterations.
+## 2024-05-18 - React Game Loop Optimization
+**Learning:** Using React state (`useState`) to store highly mutable game loop variables like `direction` or `queuedDirection` is an anti-pattern. If these variables are included in a `setInterval` hook's dependency array, rapidly updating them (e.g., spamming arrow keys) will constantly clear and restart the interval. This causes noticeable input lag and freezing in the game loop.
+**Action:** Always use `useRef` for mutable variables that don't need to trigger a UI render, especially those read inside intervals or rapid game loops. This prevents unnecessary renders and preserves the continuity of timing functions.
