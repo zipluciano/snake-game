@@ -149,14 +149,30 @@ function App() {
   }
 
   useEffect(() => {
-    const savedHighScore = window.localStorage.getItem('snake-high-score')
-    if (savedHighScore) {
-      setHighScore(Number(savedHighScore))
+    try {
+      // Security: Safely access localStorage (can throw if access is denied by browser policy)
+      const savedHighScore = window.localStorage.getItem('snake-high-score')
+      if (savedHighScore !== null) {
+        // Security: Validate input to ensure it's a valid non-negative number
+        const parsedScore = parseInt(savedHighScore, 10)
+        if (Number.isFinite(parsedScore) && parsedScore >= 0) {
+          setHighScore(parsedScore)
+        }
+      }
+    } catch (error) {
+      // Security: Fail securely without exposing internal errors
+      console.warn('Could not access local storage for high score')
     }
   }, [])
 
   useEffect(() => {
-    window.localStorage.setItem('snake-high-score', String(highScore))
+    try {
+      // Security: Safely access localStorage to prevent crashes
+      window.localStorage.setItem('snake-high-score', String(highScore))
+    } catch (error) {
+      // Security: Fail securely without exposing internal errors
+      console.warn('Could not save high score to local storage')
+    }
   }, [highScore])
 
   useEffect(() => {
