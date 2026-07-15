@@ -258,19 +258,24 @@ function App() {
   ]
 
   const cells = useMemo(() => {
-    const snakeLookup = new Int32Array(BOARD_SIZE * BOARD_SIZE).fill(-1)
+    // ⚡ Bolt: Render loop optimization
+    // - Pre-calculate foodIndex to avoid calculating x/y coords for each cell (256x per frame)
+    // - Preallocate array and use for-loop to avoid Array.from overhead
+    // - Use integer 1D index as React key to prevent string allocation per cell ("x,y")
+    const CELLS_COUNT = BOARD_SIZE * BOARD_SIZE
+    const snakeLookup = new Int32Array(CELLS_COUNT).fill(-1)
     for (let i = 0; i < snake.length; i++) {
       snakeLookup[snake[i].y * BOARD_SIZE + snake[i].x] = i
     }
 
-    return Array.from({ length: BOARD_SIZE * BOARD_SIZE }, (_, index) => {
-      const x = index % BOARD_SIZE
-      const y = Math.floor(index / BOARD_SIZE)
-      const cellKey = `${x},${y}`
+    const foodIndex = food.y * BOARD_SIZE + food.x
+    const result = new Array(CELLS_COUNT)
+
+    for (let index = 0; index < CELLS_COUNT; index++) {
       const snakeIndex = snakeLookup[index]
       const isHead = snakeIndex === 0
       const isSnake = snakeIndex !== -1
-      const isFoodCell = food.x === x && food.y === y
+      const isFoodCell = index === foodIndex
 
       let className = 'rounded-[8px] border border-white/5 bg-white/[0.03]'
       if (isSnake) {
@@ -282,8 +287,10 @@ function App() {
         className = 'cell-food rounded-full border border-orange-200/20 bg-gradient-to-br from-orange-300 via-amber-300 to-rose-400 shadow-[0_0_22px_rgba(251,146,60,0.55)]'
       }
 
-      return <div key={cellKey} className={className} />
-    })
+      result[index] = <div key={index} className={className} />
+    }
+
+    return result
   }, [food, snake])
 
   return (
