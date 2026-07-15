@@ -100,6 +100,7 @@ function App() {
   const [food, setFood] = useState(() => randomFoodPosition(INITIAL_SNAKE))
   const [isRunning, setIsRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
+  const [hasStarted, setHasStarted] = useState(false)
   const [score, setScore] = useState(0)
   const [highScore, setHighScore] = useState(0)
   const directionRef = useRef(INITIAL_DIRECTION)
@@ -132,6 +133,7 @@ function App() {
     setQueuedDirection(nextDirection)
     if (!isRunning && !isGameOver) {
       setIsRunning(true)
+      if (!hasStarted) setHasStarted(true)
     }
   }
 
@@ -144,6 +146,7 @@ function App() {
 
     setIsRunning((current) => {
       soundEngineRef.current?.toggle()
+      if (!current && !hasStarted) setHasStarted(true)
       return !current
     })
   }
@@ -248,6 +251,7 @@ function App() {
     setScore(0)
     setIsGameOver(false)
     setIsRunning(false)
+    setHasStarted(false)
   }
 
   const touchControls = [
@@ -315,16 +319,21 @@ function App() {
               <button
                 type="button"
                 onClick={() => {
-                  ensureAudio()
-                  if (isGameOver) {
-                    resetGame()
+                  if (isRunning) {
+                    handleToggleRunning()
+                  } else {
+                    ensureAudio()
+                    if (isGameOver) {
+                      resetGame()
+                    }
+                    soundEngineRef.current?.toggle()
+                    setIsRunning(true)
+                    setHasStarted(true)
                   }
-                  soundEngineRef.current?.toggle()
-                  setIsRunning(true)
                 }}
                 className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950 transition hover:scale-[1.02] hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
-                {isGameOver ? 'Novo jogo' : isRunning ? 'Jogando' : 'Iniciar'}
+                {isGameOver ? 'Novo jogo' : isRunning ? 'Pausar' : 'Iniciar'}
               </button>
               <button
                 type="button"
@@ -345,10 +354,14 @@ function App() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90">
+            <div
+              className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               Estado:{' '}
               <span className="font-semibold text-white">
-                {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : 'Pronto para começar'}
+                {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : hasStarted ? 'Pausado' : 'Pronto para começar'}
               </span>
             </div>
           </div>
@@ -360,6 +373,7 @@ function App() {
             <div className="relative">
               <div
                 className="game-board relative grid gap-1 rounded-[24px] bg-[linear-gradient(180deg,rgba(15,23,42,0.95),rgba(2,6,23,0.95))] p-2.5 sm:rounded-[28px] sm:p-3"
+                aria-hidden="true"
                 style={{
                   gridTemplateColumns: `repeat(${BOARD_SIZE}, minmax(0, 1fr))`,
                   width: 'min(94vw, 640px)',
