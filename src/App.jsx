@@ -315,16 +315,18 @@ function App() {
               <button
                 type="button"
                 onClick={() => {
-                  ensureAudio()
                   if (isGameOver) {
+                    ensureAudio()
                     resetGame()
+                    soundEngineRef.current?.toggle()
+                    setIsRunning(true)
+                  } else {
+                    handleToggleRunning()
                   }
-                  soundEngineRef.current?.toggle()
-                  setIsRunning(true)
                 }}
                 className="rounded-full bg-cyan-300 px-5 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-950 transition hover:scale-[1.02] hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
-                {isGameOver ? 'Novo jogo' : isRunning ? 'Jogando' : 'Iniciar'}
+                {isGameOver ? 'Novo jogo' : isRunning ? 'Pausar' : 'Iniciar'}
               </button>
               <button
                 type="button"
@@ -345,7 +347,11 @@ function App() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90">
+            <div
+              className="rounded-3xl border border-cyan-400/10 bg-cyan-400/5 p-4 text-sm text-cyan-100/90"
+              aria-live="polite"
+              aria-atomic="true"
+            >
               Estado:{' '}
               <span className="font-semibold text-white">
                 {isGameOver ? 'Game over' : isRunning ? 'Em andamento' : 'Pronto para começar'}
@@ -366,12 +372,17 @@ function App() {
                   aspectRatio: '1 / 1',
                   touchAction: 'none',
                 }}
+                aria-hidden="true"
               >
                 {cells}
               </div>
 
               {(!isRunning || isGameOver) && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-[28px] bg-slate-950/68 backdrop-blur-sm">
+                <div
+                  className="absolute inset-0 flex items-center justify-center rounded-[28px] bg-slate-950/68 backdrop-blur-sm"
+                  role="alert"
+                  aria-live="assertive"
+                >
                   <div className="mx-4 max-w-sm rounded-[28px] border border-white/10 bg-white/[0.05] px-8 py-7 text-center shadow-2xl">
                     <p className="text-xs uppercase tracking-[0.38em] text-cyan-200/80">
                       {isGameOver ? 'Fim de jogo' : 'Pronto'}
