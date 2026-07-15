@@ -1,0 +1,10 @@
+
+> snake-game@0.0.0 dev /app
+> vite
+
+
+  VITE v5.4.21  ready in 293 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+5:15:34 PM [vite] hmr update /src/App.jsx, /src/index.css
