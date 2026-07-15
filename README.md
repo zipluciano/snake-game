@@ -1,6 +1,6 @@
 # Snake Game
 
-Um projeto de estudo com um snake game desenvolvido em React. Além de praticar fundamentos de frontend, o objetivo deste projeto também é aprender temas relacionados ao desenvolvimento com IA, explorando como ferramentas e assistentes podem apoiar criação, iteração e melhoria de software.
+Um snake game desenvolvido em React para praticar fundamentos de frontend.
 
 ## Tecnologias
 
