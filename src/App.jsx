@@ -95,14 +95,16 @@ function randomFoodPosition(snake) {
 
 function App() {
   const [snake, setSnake] = useState(INITIAL_SNAKE)
-  const [direction, setDirection] = useState(INITIAL_DIRECTION)
-  const [queuedDirection, setQueuedDirection] = useState(INITIAL_DIRECTION)
   const [food, setFood] = useState(() => randomFoodPosition(INITIAL_SNAKE))
   const [isRunning, setIsRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
   const [score, setScore] = useState(0)
   const [highScore, setHighScore] = useState(0)
   const directionRef = useRef(INITIAL_DIRECTION)
+
+  // ⚡ Bolt: Moved queuedDirection to a ref to avoid unnecessary re-renders on every key press
+  // and to prevent the game interval from clearing and restarting, which caused stuttering.
+  const queuedDirectionRef = useRef(INITIAL_DIRECTION)
   const soundEngineRef = useRef(null)
 
   const ensureAudio = () => {
@@ -129,7 +131,7 @@ function App() {
       return
     }
 
-    setQueuedDirection(nextDirection)
+    queuedDirectionRef.current = nextDirection
     if (!isRunning && !isGameOver) {
       setIsRunning(true)
     }
@@ -198,9 +200,8 @@ function App() {
 
     const interval = window.setInterval(() => {
       setSnake((currentSnake) => {
-        const nextDirection = queuedDirection
+        const nextDirection = queuedDirectionRef.current
         directionRef.current = nextDirection
-        setDirection(nextDirection)
 
         const head = currentSnake[0]
         const nextHead = {
@@ -237,12 +238,11 @@ function App() {
     }, SPEED)
 
     return () => window.clearInterval(interval)
-  }, [food, isGameOver, isRunning, queuedDirection])
+  }, [food, isGameOver, isRunning])
 
   const resetGame = () => {
     setSnake(INITIAL_SNAKE)
-    setDirection(INITIAL_DIRECTION)
-    setQueuedDirection(INITIAL_DIRECTION)
+    queuedDirectionRef.current = INITIAL_DIRECTION
     directionRef.current = INITIAL_DIRECTION
     setFood(randomFoodPosition(INITIAL_SNAKE))
     setScore(0)
