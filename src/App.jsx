@@ -93,16 +93,23 @@ function randomFoodPosition(snake) {
   return available[Math.floor(Math.random() * available.length)]
 }
 
+const touchControls = [
+  { label: '↑', ariaLabel: 'cima', direction: DIRECTIONS.up, className: 'col-start-2 row-start-1' },
+  { label: '←', ariaLabel: 'esquerda', direction: DIRECTIONS.left, className: 'col-start-1 row-start-2' },
+  { label: '↓', ariaLabel: 'baixo', direction: DIRECTIONS.down, className: 'col-start-2 row-start-2' },
+  { label: '→', ariaLabel: 'direita', direction: DIRECTIONS.right, className: 'col-start-3 row-start-2' },
+]
+
 function App() {
   const [snake, setSnake] = useState(INITIAL_SNAKE)
-  const [direction, setDirection] = useState(INITIAL_DIRECTION)
-  const [queuedDirection, setQueuedDirection] = useState(INITIAL_DIRECTION)
   const [food, setFood] = useState(() => randomFoodPosition(INITIAL_SNAKE))
   const [isRunning, setIsRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
   const [score, setScore] = useState(0)
   const [highScore, setHighScore] = useState(0)
   const directionRef = useRef(INITIAL_DIRECTION)
+  const queuedDirectionRef = useRef(INITIAL_DIRECTION)
+  const foodRef = useRef(food)
   const soundEngineRef = useRef(null)
 
   const ensureAudio = () => {
@@ -129,7 +136,7 @@ function App() {
       return
     }
 
-    setQueuedDirection(nextDirection)
+    queuedDirectionRef.current = nextDirection
     if (!isRunning && !isGameOver) {
       setIsRunning(true)
     }
@@ -198,9 +205,8 @@ function App() {
 
     const interval = window.setInterval(() => {
       setSnake((currentSnake) => {
-        const nextDirection = queuedDirection
+        const nextDirection = queuedDirectionRef.current
         directionRef.current = nextDirection
-        setDirection(nextDirection)
 
         const head = currentSnake[0]
         const nextHead = {
@@ -208,7 +214,7 @@ function App() {
           y: (head.y + nextDirection.y + BOARD_SIZE) % BOARD_SIZE,
         }
 
-        const grows = isSameCell(nextHead, food)
+        const grows = isSameCell(nextHead, foodRef.current)
         const bodyToCheck = grows ? currentSnake : currentSnake.slice(0, -1)
         const hitsSelf = bodyToCheck.some((segment) => isSameCell(segment, nextHead))
 
@@ -229,7 +235,9 @@ function App() {
             setHighScore((currentHigh) => Math.max(currentHigh, nextScore))
             return nextScore
           })
-          setFood(randomFoodPosition(updatedSnake))
+          const nextFood = randomFoodPosition(updatedSnake)
+          foodRef.current = nextFood
+          setFood(nextFood)
         }
 
         return updatedSnake
@@ -237,25 +245,19 @@ function App() {
     }, SPEED)
 
     return () => window.clearInterval(interval)
-  }, [food, isGameOver, isRunning, queuedDirection])
+  }, [isGameOver, isRunning])
 
   const resetGame = () => {
     setSnake(INITIAL_SNAKE)
-    setDirection(INITIAL_DIRECTION)
-    setQueuedDirection(INITIAL_DIRECTION)
+    queuedDirectionRef.current = INITIAL_DIRECTION
     directionRef.current = INITIAL_DIRECTION
-    setFood(randomFoodPosition(INITIAL_SNAKE))
+    const nextFood = randomFoodPosition(INITIAL_SNAKE)
+    foodRef.current = nextFood
+    setFood(nextFood)
     setScore(0)
     setIsGameOver(false)
     setIsRunning(false)
   }
-
-  const touchControls = [
-    { label: '↑', ariaLabel: 'cima', direction: DIRECTIONS.up, className: 'col-start-2 row-start-1' },
-    { label: '←', ariaLabel: 'esquerda', direction: DIRECTIONS.left, className: 'col-start-1 row-start-2' },
-    { label: '↓', ariaLabel: 'baixo', direction: DIRECTIONS.down, className: 'col-start-2 row-start-2' },
-    { label: '→', ariaLabel: 'direita', direction: DIRECTIONS.right, className: 'col-start-3 row-start-2' },
-  ]
 
   const cells = useMemo(() => {
     const snakeLookup = new Int32Array(BOARD_SIZE * BOARD_SIZE).fill(-1)
